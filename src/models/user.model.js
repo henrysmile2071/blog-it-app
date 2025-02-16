@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
   });
 
   User.associate = models => {
-    models.User.hasMany(models.Posts, { foreignKey: 'userId', targetId: 'id' });
+    models.User.hasMany(models.Post, { foreignKey: 'userId', targetId: 'id' });
   };
   return User;
 };
