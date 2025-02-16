@@ -22,6 +22,7 @@
   "author": "henrychen.chc@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "chalk": "^5.3.0",
     "cls-hooked": "^4.2.2",
     "cors": "^2.8.5",
@@ -36,6 +37,7 @@
     "helmet": "^7.1.0",
     "http-status": "^1.7.4",
     "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",

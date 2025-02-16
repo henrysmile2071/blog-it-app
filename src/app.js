@@ -13,7 +13,7 @@ import { swaggerSpec } from './config/swagger-config.js';
 import { generateSpecs } from './utils/generate-api-specs.js';
 
 import healthRoute from './routes/health.route.js';
-import v1Routes from './routes/v1/index.js';
+import apiRoutes from './routes/v1/index.js';
 
 const logger = Logger(fileURLToPath(import.meta.url));
 
@@ -59,8 +59,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 
 app.use('/health', healthRoute);
 
-// v1 api routes
-app.use('/v1', v1Routes);
+// api routes
+app.use('/api', apiRoutes);
 
 // handle 404 not found error
 app.use(notFoundHandler);
