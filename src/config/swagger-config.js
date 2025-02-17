@@ -13,12 +13,12 @@ import swaggerJSDoc from 'swagger-jsdoc';
 const swaggerDefinition = {
   openapi: '3.0.3',
   info: {
-    title: 'Express API for User Profile',
+    title: 'Express API for simple blogging platform',
     version: '1.0.0',
-    description: 'Simple boilerplate code base for creating APIs with `Node.js Express` framework using `Sequelize` with `PostgreSQL` database.',
+    description: 'Simple blogging platform with register, login and creating/reading posts',
     contact: {
       name: 'Henry Chen',
-      url: 'https://github.com/henrysmile2071',
+      url: 'https://github.com/henrysmile2071/blog-it-app/',
     },
   },
   servers: [
