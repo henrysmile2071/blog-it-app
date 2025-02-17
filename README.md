@@ -21,6 +21,11 @@ RESTful API for a simplified blogging platform with `Node.js Express` framework 
 - Code-coverage using Node.js' built in functionality `c8`
 - `Eslint`
 - `winston` logger
+- `Swagger` documentation
+- Pagination for getAll posts
+- `Helmet` for security
+- `jsonwebtoken` for authentication
+- `bcrypt` password hashing before storing to database
 
 - **PostgreSQL**
 
@@ -52,6 +57,8 @@ git clone https://github.com/henrysmile2071/blog-it-app.git
   ```sh
   npm run local
   ```
+
+- [Swagger Documentation](http://localhost:3000/api-docs/#)
 
 ## Tests & Coverage
 
@@ -151,6 +158,7 @@ git clone https://github.com/henrysmile2071/blog-it-app.git
     
     curl --location --request POST 'localhost:3000/v1/api/posts'\
     --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJleGFtcGxlQG1haWwuY29tIiwiaWF0IjoxNzM5NzYzMzkwLCJleHAiOjE3Mzk3NjY5OTB9.zxkKIbzPFMDd1iitVFcNmy1V5G8LM_cKTfgwzeHCovA' \
     --data-raw '{
       "title": "Lorem ipsum",
       "content": "lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -173,19 +181,43 @@ git clone https://github.com/henrysmile2071/blog-it-app.git
 
     # Request
 
-    curl --location --request GET 'localhost:3000/v1/api/posts'
+    curl --location --request GET 'localhost:3000/v1/api/posts?page=1&limit=10'
 
     # Response
 
     {
       "success": true,
-      "body": 
-      {
-        "id": 1,
-        "title": "Lorum epsum",
-        "content": "lorum epsum in the future",
-        "author": "example author",
-        "createdAt": "2022-03-20T20:39:17.912Z",
+      "body": {
+        "currentPage": 1,
+        "totalPages": 1,
+        "totalPosts": "4",
+        "limit": 10,
+        "data": [
+            {
+              "title": "Lorem Upsum",
+              "content": "lorum upsum di get loeit",
+              "author": "Lawrence",
+              "createdAt": "2025-02-17T03:38:46.730Z"
+            },
+            {
+              "title": "Lorem Upsum",
+              "content": "lorum upsum di get loeit",
+              "author": "Lawrence",
+              "createdAt": "2025-02-17T03:37:09.206Z"
+            },
+            {
+              "title": "Lorem Upsum Cola",
+              "content": "lorum upsum di get loeit pettis nomour",
+              "author": "Lawrence",
+              "createdAt": "2025-02-17T03:01:14.714Z"
+            },
+            {
+              "title": "Lorem Upsum",
+              "content": "lorum upsum di get loeit",
+              "author": "Lawrence",
+              "createdAt": "2025-02-16T16:29:52.780Z"
+            }
+        ]
       }
     }
     
