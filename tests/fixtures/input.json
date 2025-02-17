@@ -1,0 +1,14 @@
+{
+  "loginValid": {
+    "email": "example@mail.com",
+    "password": "passwordexample"
+  },
+  "loginFormatError": {
+    "email": "examplewrongmail.com",
+    "password": "passwordexample"
+  },
+  "loginPasswordError": {
+    "email": "example@mail.com",
+    "password": "wrongpassword"
+  }
+}
