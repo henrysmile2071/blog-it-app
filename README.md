@@ -90,6 +90,8 @@ git clone https://github.com/henrysmile2071/blog-it-app.git
 | DB_NAME  | Database name            | `postgres`    |
 | DB_USER  | Database username        | `postgres`    |
 | DB_PASS  | Database password        | `postgres`    |
+| JWT_SECRET | jwt secret             | `your_super_secret_key` |
+| JWT_EXPIRES_IN | jwt expiry time    | `1h`          |
 
 > NOTE: These environment variables are already passed to `npm run local` and `npm test` scripts under `package.json` with their default values. You can update as per your need.
 
@@ -131,7 +133,7 @@ git clone https://github.com/henrysmile2071/blog-it-app.git
       "success": true,
       "body": 
       {
-        "token": "JWT token"
+        "token": "JWT_token"
       }
     }
 
