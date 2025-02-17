@@ -1,13 +1,11 @@
 openapi: 3.0.3
 info:
-  title: Express API for User Profile
+  title: Express API for simple blogging platform
   version: 1.0.0
-  description: >-
-    Simple boilerplate code base for creating APIs with `Node.js Express`
-    framework using `Sequelize` with `PostgreSQL` database.
+  description: Simple blogging platform with register, login and creating/reading posts
   contact:
     name: Henry Chen
-    url: https://github.com/henrysmile2071
+    url: https://github.com/henrysmile2071/blog-it-app/
 servers:
   - url: http://localhost:3000
     description: Development server
@@ -38,7 +36,75 @@ paths:
                     type: string
                     format: date-time
                     description: Current date in ISO format
-  /v1/users:
+  /api/login:
+    post:
+      tags:
+        - v1
+      description: Endpoint to login user, returns jwt token on successful login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+      responses:
+        '200':
+          description: returns a jwt token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserSuccess'
+  /api/posts:
+    get:
+      tags:
+        - v1
+      description: Endpoint to get all posts with pagination
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: The page number for pagination (1-based).
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            description: The number of posts to retrieve per page.
+            example: 10
+      responses:
+        '200':
+          description: get posts success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPostsResponse'
+    post:
+      tags:
+        - v1
+      description: Endpoint to create/add new post
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+      responses:
+        '201':
+          description: create post success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePostSuccess'
+        '401':
+          description: Unauthorized - Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/register:
     post:
       tags:
         - v1
@@ -50,55 +116,31 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateUserRequest'
       responses:
-        '200':
-          description: Application helath details.
+        '201':
+          description: register success.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateUserSuccess'
 components:
   schemas:
-    Skills:
+    LoginUserRequest:
       type: object
+      required:
+        - email
+        - password
       properties:
-        name:
+        email:
           type: string
-          description: Skill name.
-          example: JavaScript
-        proficiency:
+          format: email
+          description: The user's email address
+          example: example@mail.com
+        password:
           type: string
-          description: Skill proficiency level.
-          enum:
-            - Beginer
-            - Intermediate
-            - Advanced
-    User:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The user's first/given name.
-          example: Chetan
-        lastName:
-          type: string
-          description: The user's surname/family name.
-          example: Patil
-        gender:
-          type: string
-          enum:
-            - Male
-            - Female
-            - Other
-    CreateUserRequest:
-      allOf:
-        - $ref: '#/components/schemas/User'
-        - type: object
-          properties:
-            skills:
-              type: array
-              items:
-                $ref: '#/components/schemas/Skills'
-    CreateUserSuccess:
+          format: password
+          description: The user's password
+          example: passwordexample
+    LoginUserSuccess:
       type: object
       properties:
         success:
@@ -106,27 +148,118 @@ components:
           description: Flag stating status of API call
           example: true
         body:
-          allOf:
-            - $ref: '#/components/schemas/User'
-            - type: object
-              properties:
-                id:
-                  type: number
-                  description: Id generated for created user.
-                  example: 1
-                skills:
-                  type: array
-                  items:
-                    allOf:
-                      - type: object
-                        properties:
-                          id:
-                            type: number
-                            description: Id generated for created skill.
-                            example: 1
-                          userId:
-                            type: number
-                            description: Id generated for created user.
-                            example: 1
-                      - $ref: '#/components/schemas/Skills'
+          type: string
+          description: jwt token for authorized actions
+          example: jwt
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          description: post id
+          example: 1
+        title:
+          type: string
+          description: The post title.
+          example: Lorem Upsum
+        content:
+          type: string
+          description: The post's content.
+          example: lorum upsum di get loeit
+        author:
+          type: string
+          description: the authors username
+          example: Lawrence
+        createdAt:
+          type: string
+          description: timestamp at creation
+          example: '2017-07-21T17:32:28Z'
+          format: date-time
+    CreatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The post title.
+          example: Lorem Upsum
+        content:
+          type: string
+          description: The post's content.
+          example: lorum upsum di get loeit
+    CreatePostSuccess:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Flag stating status of API call
+          example: true
+    GetPostsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates whether the API call was successful.
+          example: true
+        body:
+          currentPage:
+            type: integer
+            description: The current page number.
+            example: 1
+          totalPages:
+            type: integer
+            description: The total number of available pages.
+            example: 5
+          totalPosts:
+            type: integer
+            description: The total number of posts available.
+            example: 50
+          data:
+            type: array
+            description: List of posts in the current page.
+            items:
+              $ref: '#/components/schemas/Post'
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful.
+          example: false
+        msg:
+          type: string
+          description: A message describing the error.
+          example: Unauthorized - Missing or invalid token.
+        error:
+          type: object
+          description: Detailed error information.
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The user's name.
+          example: Lawrence
+        email:
+          type: string
+          description: The user's email.
+          example: example@mail.com
+        password:
+          type: string
+          example: passwordexample
+    CreateUserRequest:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+    CreateUserSuccess:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Flag stating status of API call
+          example: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 tags: []
