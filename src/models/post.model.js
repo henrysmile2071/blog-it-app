@@ -44,7 +44,7 @@ export default (sequelize, DataTypes) => {
   });
 
   Post.associate = models => {
-    models.Post.belongsTo(models.User, { foreignKey: 'userId', targetId: 'id' });
+    models.Post.belongsTo(models.User, { foreignKey: 'userId', targetId: 'id', as: 'author' });
   };
   return Post;
 };
