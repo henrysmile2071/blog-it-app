@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 /**
  * Model class for "User"
@@ -37,11 +37,11 @@ export default (sequelize, DataTypes) => {
     tableName: 'user',
     underscored: true,
     hooks: {
-      beforeCreate: async (user) => {
+      beforeCreate: async user => {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
       },
-      beforeUpdate: async (user) => {
+      beforeUpdate: async user => {
         if (user.changed('password')) {
           const salt = await bcrypt.genSalt(10);
           user.password = await bcrypt.hash(user.password, salt);

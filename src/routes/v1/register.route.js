@@ -1,11 +1,10 @@
 import express from 'express';
-import { Validator } from 'express-json-validator-middleware';
 
+import { validateRequest } from '../../middlewares/validate-request.js';
 import { addUser } from '../../controllers/user.controller.js';
-import { addUserSchema } from '../../validations/users-request.schema.js';
+import { addUserValidators } from '../../validations/users-request.js';
 
 const router = express.Router();
-const { validate } = new Validator();
 
 /**
  * @openapi
@@ -55,7 +54,7 @@ const { validate } = new Validator();
  *             $ref: '#/components/schemas/CreateUserRequest'
  *     responses:
  *       201:
- *         description: the users id.
+ *         description: register success.
  *         content:
  *           application/json:
  *             schema:
@@ -64,6 +63,6 @@ const { validate } = new Validator();
  */
 router
   .route('/')
-  .post(validate({ body: addUserSchema }), addUser);
+  .post(addUserValidators, validateRequest, addUser);
 
 export default router;

@@ -1,5 +1,4 @@
 import httpStatus from 'http-status';
-import { ValidationError } from 'express-json-validator-middleware';
 
 import * as errors from '../utils/api-error.js';
 
@@ -15,10 +14,6 @@ export default async (err, req, res, next) => {
   // catch all api errors
   if (err instanceof APIError) {
     msg = message;
-  } else if (err instanceof ValidationError) {
-    status = httpStatus.BAD_REQUEST;
-    msg = httpStatus[httpStatus.BAD_REQUEST];
-    error = err.validationErrors;
   } else {
     status = httpStatus.INTERNAL_SERVER_ERROR;
     msg = 'Something went wrong!';
